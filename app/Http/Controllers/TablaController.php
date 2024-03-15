@@ -18,4 +18,11 @@ class TablaController extends Controller
             return null;
         }
     }
+    function tabla(){
+        try{
+            return view('tabla');
+        } catch(RequestException $e){
+            return null;
+        }
+    }
 }

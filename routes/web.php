@@ -14,3 +14,4 @@ use App\Http\Controllers\TablaController;
 */
 
 Route::get('/', [TablaController::class, 'index']);
+Route::get('/tabla', [TablaController::class, 'tabla']);

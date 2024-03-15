@@ -16,8 +16,8 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-          <a class="nav-link active" aria-current="page" href="">Cargá tu licencia</a>
-          <a class="nav-link" href="#" style="padding:10px">Tablas de licencias</a>
+          <a class="nav-link active" aria-current="page" href="/">Cargá tu licencia</a>
+          <a class="nav-link" href="/tabla" style="padding:10px">Tablas de licencias</a>
         </div>
       </div>
     </div>
@@ -30,11 +30,11 @@
         </div>
         <div class="col-md-4">
           <label for="fecha" class="form-label">Fecha de inicio de licencia</label>
-          <input type="date" class="form-control" id="fechainicio" name="fechainicio">
+          <input type="date" class="form-control" id="fechaInicio" name="fechaInicio">
         </div>
         <div class="col-md-4">
           <label for="fecha" class="form-label">Fecha de fin de licencia</label>
-          <input type="date" class="form-control" id="fechafin" name="fechafin">
+          <input type="date" class="form-control" id="fechaFin" name="fechaFin">
         </div>
         <div class="col-md-6">
           <label for="inputState" class="form-label">Tipo de licencia</label>
@@ -102,6 +102,12 @@
 <script>
     const inputs = document.querySelectorAll('#myForm input');
     $(document).ready(function(){
+        $.validator.addMethod("fechaMenor", function(value, element, params) {
+        var fechaInicio = new Date($('#fechaInicio').val());
+        var fechaFin = new Date(value);
+        return fechaFin > fechaInicio;
+    }, "La fecha debe ser mayor que la fecha de inicio.");
+
     $("#myForm").validate({
         rules: {
             dni: {
@@ -110,11 +116,12 @@
                 minlength: 8,
                 maxlength: 9
             },
-            fechainicio: {
+            fechaInicio: {
               required: true
             },
-            fechafin: {
-              required: true
+            fechaFin: {
+              required: true,
+              fechaMenor: true
             },
             licencia: {
               required: true
