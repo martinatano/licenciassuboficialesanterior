@@ -25,4 +25,21 @@ class TablaController extends Controller
             return null;
         }
     }
+    function envio(Request $request){
+        try{
+        $dni = Request::input('dni');
+        $fechaInicio = Request::input('fechaInicio');
+        $fechaFin = Request::input('fechaFin');
+        $licencia = Request::input('licencia');
+        $provincia = Request::input('provincia');
+        $direccion = Request::input('direccion');
+        $ciudad= Request::input('ciudad');
+        $localidad = Request::input('localidad');
+        $ordendeldia = Request::input('ordendeldia');
+
+        return view('tabla', compact('dni', 'fechaInicio', 'fechaFin', 'licencia', 'provincia', 'direccion', 'ciudad', 'localidad', 'ordendeldia'));
+        } catch(RequestException $e){
+        return null;
+        }
+    }
 }

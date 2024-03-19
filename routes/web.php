@@ -15,3 +15,4 @@ use App\Http\Controllers\TablaController;
 
 Route::get('/', [TablaController::class, 'index']);
 Route::get('/tabla', [TablaController::class, 'tabla']);
+Route::post('/procesar-formulario', [FormController::class, 'envio']);

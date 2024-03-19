@@ -23,8 +23,9 @@
     </div>
   </nav>
   <h1 style="font-size: 25px; text-align: center;margin-top: 20px; font-family:Arial, Helvetica, sans-serif;">Licencias de suboficiales</h1>
-    <form class="row g-3" id="myForm" style="padding:60px;">
-        <div class="col-md-4">
+    <form  class="row g-3" id="myForm" style="padding:60px;">
+    @csrf   
+      <div class="col-md-4">
           <label for="dni" class="form-label">DNI</label>
           <input type="text" class="form-control" id="dni" name="dni">
         </div>
@@ -91,7 +92,7 @@
           <input type="text" class="form-control" id="ordendeldia" name="ordendeldia">
         </div>
         <div class="col-12">
-          <button type="submit" class="btn btn-primary">Agregar licencia</button>
+          <button type="submit" id="btnEnvio" class="btn btn-primary">Agregar licencia</button>
         </div>
       </form>
 </body>
@@ -178,6 +179,23 @@
               maxlength: "La orden del dia no puede tener mas de 10 caracteres"
             }
         }
+    });
+    $('#btnEnvio').click(function(e){
+        e.preventDefault(); 
+        var formData = $('#myForm').serialize();
+        console.log(formData);
+        $.ajax({
+          data: formData,
+          url: '/procesar-formulario',
+            type: 'POST',
+            success: function(response){
+                // Redireccionar a la página que contiene la tabla jTable
+                window.location.href = '/tabla';
+            },
+            error: function(xhr, status, error){
+                console.error('Hubo un error al enviar los datos: ' + error);
+            }
+        });
     });
 });
 
