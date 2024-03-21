@@ -39,7 +39,7 @@
         </div>
         <div class="col-md-6">
           <label for="inputState" class="form-label">Tipo de licencia</label>
-          <select id="licencia" class="form-select" name="licencia">
+          <select id="licencia" class="form-select" name="tipo">
             <option selected>Seleccione una opcion:</option>
             <option>Licencia ordinaria</option>
             <option>Licencia extraordinaria</option>
@@ -79,17 +79,13 @@
           <input type="text" class="form-control" id="direccion" name="direccion">
         </div>
         <div class="col-md-4">
-          <label for="inputCity" class="form-label">Ciudad</label>
-          <input type="text" class="form-control" id="inputCity" name="ciudad">
-        </div>
-        <div class="col-md-4">
           <label for="inputState" class="form-label">Localidad</label>
           <input type="text" class="form-control" id="localidad" name="localidad">
           </select>
         </div>
         <div class="col-md-4">
           <label for="inputZip" class="form-label">Orden del dia</label>
-          <input type="text" class="form-control" id="ordendeldia" name="ordendeldia">
+          <input type="text" class="form-control" id="ordendeldia" name="ordenDia">
         </div>
         <div class="col-12">
           <button type="submit" id="btnEnvio" class="btn btn-primary">Agregar licencia</button>
@@ -100,6 +96,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     const inputs = document.querySelectorAll('#myForm input');
     $(document).ready(function(){
@@ -124,7 +121,7 @@
               required: true,
               fechaMenor: true
             },
-            licencia: {
+            tipo: {
               required: true
             },
             provincia:{
@@ -133,13 +130,10 @@
             direccion:{
               required: true
             },
-            ciudad:{
-              required: true
-            },
             localidad:{
               required: true
             },
-            ordendeldia:{
+            ordenDia:{
               required:true,
               minlength: 6,
               maxlength: 10
@@ -158,7 +152,7 @@
             fechafin: {
                 required: "Debes seleccionar una fecha de fin"
             },
-            licencia: {
+            tipo: {
               required: "Debe seleccionar el tipo de licencia"
             },
             provincia:{
@@ -167,13 +161,10 @@
             direccion:{
               required: "Debe indicar la direccion"
             },
-            ciudad:{
-              required: "Debe indicar la ciudad"
-            },
             localidad:{
               required:"Debe indicar la localidad"
             },
-            ordendeldia:{
+            ordenDia:{
               required: "Debe indicar la orden del dia",
               minlength: "La orden del dia debe tener al menos 6 caracteres",
               maxlength: "La orden del dia no puede tener mas de 10 caracteres"
@@ -184,13 +175,20 @@
         e.preventDefault(); 
         var formData = $('#myForm').serialize();
         console.log(formData);
-        $.ajax({
+       $.ajax({
+          method: 'POST',
+          url: 'http://localhost:5800/insert',
+          dataType:'json',
           data: formData,
-          url: '/procesar-formulario',
-            type: 'POST',
-            success: function(response){
-                // Redireccionar a la página que contiene la tabla jTable
-                window.location.href = '/tabla';
+            success: function(data){
+               
+                console.log(data); 
+                Swal.fire({
+                icon: "success",
+                 title: "Gracias!",
+                  text: "Formulario enviado con exito",
+                   
+});
             },
             error: function(xhr, status, error){
                 console.error('Hubo un error al enviar los datos: ' + error);

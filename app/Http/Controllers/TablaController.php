@@ -25,21 +25,34 @@ class TablaController extends Controller
             return null;
         }
     }
-    function envio(Request $request){
+    function envio(){
         try{
-        $dni = Request::input('dni');
-        $fechaInicio = Request::input('fechaInicio');
-        $fechaFin = Request::input('fechaFin');
-        $licencia = Request::input('licencia');
-        $provincia = Request::input('provincia');
-        $direccion = Request::input('direccion');
-        $ciudad= Request::input('ciudad');
-        $localidad = Request::input('localidad');
-        $ordendeldia = Request::input('ordendeldia');
+            $client = new Client(['verify' => false]);
+            $request = $client -> get('http://localhost:5800/');
+            $response = json_decode($request->getBody()->getContents(), true);
 
-        return view('tabla', compact('dni', 'fechaInicio', 'fechaFin', 'licencia', 'provincia', 'direccion', 'ciudad', 'localidad', 'ordendeldia'));
+            return view('tabla', ['licencias' => ['licencias' => $response['licencias']]]);
         } catch(RequestException $e){
-        return null;
+        return null ;
+        }
+    }
+    function procesarForm(Request $request){
+        $dni = Request::input('dni');
+        $fechaInicio = Request:: input('fechaInicio');
+        $fechaFin = Request:: input('fechaFin');
+        $tipo = Request:: input('tipoLicencia');
+        $provincia = Request:: input('provincia');
+        $direccion = Request:: input('direccion');
+        $localidad = Request:: input('localidad');
+        $ordenDia = Request:: input('ordenDia');
+
+        try{
+            $client  = new Client(['verify' => false]);
+            $request = $client -> get('http://localhost:5800/insert/');
+            $response = json_decode($request->getBody()->getContents(), true);
+            return json_encode($response);
+        }catch(RequestException $e){
+            return $e->getMessage();
         }
     }
 }

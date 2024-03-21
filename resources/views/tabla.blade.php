@@ -31,49 +31,29 @@
 <script src="https://cdn.jsdelivr.net/npm/jtable@2.6.0/lib/jquery.jtable.min.js"></script>
 <script>
 $(document).ready(function () {
-    $.ajax({
-        url: window.location.origin+'',
-        type:'HEAD',
-        error: function()
-        {
-            $("div .jtable-busy-message")
-        },
-        success: function()
-        {
-        }
-    });
-
     $('#PartesVencidos').jtable({
         title: 'Licencias de Suboficiales',
         paging: true,
         pageSize: 10,
         sorting: true,
         async: true,
-        defaultSorting: 'nroOrden',
+        defaultSorting: 'fechaInicio',
         actions: {
             listAction: function (postData, jtParams) {
                 return $.Deferred(function ($dfd) {
                     $.ajax({
                         type: 'GET',
-                        url: '/procesar-formulario',
+                        url: 'http://localhost:5800/',
                         dataType: 'json',
-                        async: true,
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                        
+                          success: function (data) {
+                            $dfd.resolve({
+                            "Result": "OK",
+                            "Records": data.licencias, // Suponiendo que 'licencias' es el arreglo que contiene los datos en tu respuesta JSON
+                            "TotalRecordCount": data.licencias.length
+                            });
                         },
-                        dataType: 'json',
-                        data: {
-                            jtStartIndex: (jtParams.jtStartIndex),
-                            jtPageSize: jtParams.jtPageSize,
-                            jtSorting: jtParams.jtSortingartIndex,
-                            idEstado: 2,
-                            buscar: $('#buscar').val()
-                        },
-                        success: function (data) {
-                            $dfd.resolve(data);
-
-                        },
-                        error: function (data) {
+                        error: function () {
                             $dfd.reject();
                         }
                     });
@@ -89,19 +69,19 @@ $(document).ready(function () {
                 list: true,
                 sorting: false,
             },
-            fechainicio:{
+            fechaInicio:{
                 listClass: 'text-center',
                 title: 'Fecha inicio',
                 width: '10%',
                 sorting: false,
             },
-            fechafin: {
+            fechaFin: {
                 listClass: 'text-center',
                 title: 'Fecha fin',
                 width: '10%',
                 sorting: false,
             },
-            tipolicencia: {
+            tipo: {
                 title: 'Tipo de licencia',
                 listClass: 'text-center',
                 width: '10%',
@@ -131,52 +111,17 @@ $(document).ready(function () {
                 sorting: false,
                 width: '12%',
             },
-            ciudad: {
-                listClass: 'text-center',
-                width: '12%',
-                title: 'Ciudad',
-                sorting: false,
-            },
-            ordendeldia: {
+            ordenDia: {
                 listClass: 'text-center',
                 width: '12%',
                 title: 'Orden del Dia',
                 sorting: false,
             }, 
         },
-        rowInserted: function (event, data) {
-            if (data.record) {
-                if(data.record.idEstado == 'Cerrado/AD'){
-                    if(data.record.diasFinHastaLaFecha >= 15 && data.record.diasFinHastaLaFecha < 30){
-                        data.row.css("background","#fff3cd");
-                    } else if(data.record.diasFinHastaLaFecha >= 30 && data.record.diasFinHastaLaFecha < 45){
-                        data.row.css("background","#6DA4BD");
-                    }else if ( data.record.diasHastaLaFecha > 45 ) {
-                        data.row.css("background","#DB7377");
-                    }}else{
-
-if(data.record.diasDesdeHastaLaFecha >= 30 && data.record.diasDesdeHastaLaFecha <45){
-    data.row.css("background","#6DA4BD");
-}else if(data.record.diasDesdeHastaLaFecha > 45){
-    data.row.css("background","#DB7377");
-}else if ( data.record.diasDesdeHastaLaFecha >=15 && data.record.diasDesdeHastaLaFecha <30 ) {
-    data.row.css("background","#fff3cd");
-}
-}
-}
-}
 });
 
-$('#tablaPartesVencidos').jtable('load');
-function agregarFila(nombre, email) {
-$('#tablaDatos').jtable('addRecord', {
-record: {
-dni: dni,
-Email: email
-},
-clientOnly: true // Agregar solo en el lado del cliente (no se enviará al servidor)
-});
-}
+$('#PartesVencidos').jtable('load');
+
 })
 </script>
 </body>
