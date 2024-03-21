@@ -58,7 +58,10 @@ $(document).ready(function () {
                         }
                     });
                 });
-            }
+            },
+                createAction: '/GettingStarted/CreatePerson',
+                updateAction: '/GettingStarted/UpdatePerson',
+                deleteAction: '/GettingStarted/DeletePerson'
         },
         fields: {
             dni: {
