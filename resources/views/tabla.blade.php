@@ -61,12 +61,15 @@ $(document).ready(function () {
             },
                 createAction: '/GettingStarted/CreatePerson',
                 updateAction: '/GettingStarted/UpdatePerson',
-                deleteAction:  function (postData, jtParams) {
+                deleteAction: '/eliminar-form',
+           /*     deleteAction:  function (postData, jtParams) {
             return $.Deferred(function ($dfd) {
+                console.log(postData.record.id),
                 $.ajax({
                     type: 'POST',
-                    url: '', // Utilizar la ruta nombrada en web.php
-                    data: { dni: postData.record.dni }, // Pasar el ID de la licencia a eliminar
+                    url: '/eliminar-form',
+                    // Utilizar la ruta nombrada en web.php
+                    data: { id: postData.record.id }, // Pasar el ID de la licencia a eliminar
                     dataType: 'json',
                     success: function (data) {
                         $dfd.resolve();
@@ -76,8 +79,9 @@ $(document).ready(function () {
                         $dfd.reject();º
                     }
                 });
+                
             });
-        }
+        }*/
         },
         fields: {
             dni: {

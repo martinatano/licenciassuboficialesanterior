@@ -56,7 +56,8 @@ class TablaController extends Controller
         }
     }
     function eliminarForm(Request $request){
-        $dni = Request::input('dni');
+        dd($request);
+        $id = Request::input('id');
         try{
             $response = Http::delete('http://localhost:5800/delete/', ['dni' => $dni]);
             if ($response->successful()) {
