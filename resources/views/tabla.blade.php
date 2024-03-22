@@ -61,7 +61,23 @@ $(document).ready(function () {
             },
                 createAction: '/GettingStarted/CreatePerson',
                 updateAction: '/GettingStarted/UpdatePerson',
-                deleteAction: '/GettingStarted/DeletePerson'
+                deleteAction:  function (postData, jtParams) {
+            return $.Deferred(function ($dfd) {
+                $.ajax({
+                    type: 'POST',
+                    url: '', // Utilizar la ruta nombrada en web.php
+                    data: { dni: postData.record.dni }, // Pasar el ID de la licencia a eliminar
+                    dataType: 'json',
+                    success: function (data) {
+                        $dfd.resolve();
+                        $('#PartesVencidos').jtable('reload'); // Recargar la tabla después de la eliminación
+                    },
+                    error: function () {
+                        $dfd.reject();º
+                    }
+                });
+            });
+        }
         },
         fields: {
             dni: {
@@ -124,7 +140,10 @@ $(document).ready(function () {
 });
 
 $('#PartesVencidos').jtable('load');
-
+$('#PartesVencidos').on('click', '.jtable-toolbar-item-add-record', function () {
+        // Redirigir al usuario a la vista del formulario
+        window.location.href = '/'; // Reemplaza '/ruta-de-tu-formulario' con la ruta correcta de tu formulario
+    });
 })
 </script>
 </body>

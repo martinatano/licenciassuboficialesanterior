@@ -55,4 +55,18 @@ class TablaController extends Controller
             return $e->getMessage();
         }
     }
+    function eliminarForm(Request $request){
+        $dni = Request::input('dni');
+        try{
+            $response = Http::delete('http://localhost:5800/delete/', ['dni' => $dni]);
+            if ($response->successful()) {
+                return response()->json(['message' => 'Licencia eliminada correctamente']);
+            } else {
+                // Error en la solicitud al endpoint
+                return response()->json(['error' => 'Error al eliminar la licencia'], 500);
+            }
+            }catch(RequestException $e){
+            return $e->getMessage();
+        }
+    }
 }
