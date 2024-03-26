@@ -30,6 +30,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jtable@2.6.0/lib/jquery.jtable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 $(document).ready(function () {
     $('#PartesVencidos').jtable({
@@ -62,21 +63,26 @@ $(document).ready(function () {
             },
                 createAction: '/GettingStarted/CreatePerson',
                 updateAction: 'http://localhost:5800/update/',
-                deleteAction: function (postData, jtParams) {
-    return $.Deferred(function ($dfd) {
+                deleteAction: function (postData) {
+                return $.Deferred(function ($dfd) {
         // Mostrar una confirmación personalizada antes de la eliminación
-        if (confirm('¿Estás seguro de que quieres eliminar esta licencia?')) {
-            $.ajax({
-                type: 'DELETE',
-                url: '/eliminar-form',
-                headers: {
+                if (confirm('¿Estás seguro de que quieres eliminar esta licencia?')) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: 'http://localhost:5800/delete/'+postData.id,
+                    headers: {
                     'X-CSRF-TOKEN': document.getElementsByTagName("meta")[2].content,
                     'Content-Type': 'application/json'
-                },
-                dataType: 'json',
+                    },
+                    dataType: 'json',
                 success: function (data) {
                     // Mostrar mensaje de éxito personalizado
-                    alert('Licencia eliminada correctamente');
+                    Swal.fire({
+                                icon: "success",
+                                title: "Exito",
+                                text: "Licencia eliminada correctamente!"
+                    });
+                     $('#PartesVencidos').jtable('reload'); 
                     $dfd.resolve(data);
                 },
                 error: function () {
@@ -179,14 +185,16 @@ $(document).ready(function () {
                 sorting: false,
             }, 
         },
-        messages: {
-        deleteConfirmation: '¿Estás seguro de que quieres eliminar esta licencia?', // Mensaje personalizado para la confirmación de eliminación
-        deleteText: 'Eliminar', // Texto del botón de eliminar en la alerta
-        deleting: 'Eliminando...', // Mensaje que se muestra durante el proceso de eliminación
-        deleteSuccess: 'Licencia eliminada correctamente', // Mensaje de éxito después de la eliminación
-        deleteError: 'Error al eliminar la licencia', // Mensaje de error en caso de fallo en la eliminación
-    },
-
+        messages:{
+            deleteConfirmation: false,
+            areYouSure: false,
+            serverCommunicationError: false,
+            loadingMessage: false,
+            save: false,
+            deleting:false,
+            error: false,
+            close: false
+        }
 });
 
 $('#PartesVencidos').jtable('load');

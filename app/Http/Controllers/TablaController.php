@@ -57,16 +57,4 @@ class TablaController extends Controller
             return $e->getMessage();
         }
     }
-    function eliminarForm(Request $request){
-        $id = Request::input('id');
-        try{
-            $client = new Client(['verify' => false]);
-            $request = $client -> delete('http://localhost:5800/delete/'.$id);
-            $response = json_decode($request->getBody()->getContents(), true);
-
-            return json_encode($response);
-        } catch(RequestException $e){
-        return null ;
-        }
-    }
 }
