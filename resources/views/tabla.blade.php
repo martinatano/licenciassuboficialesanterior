@@ -68,7 +68,7 @@
                                 $dfd.resolve({
                                     "Result": "OK",
                                     "Records": data
-                                        .licencias, // Suponiendo que 'licencias' es el arreglo que contiene los datos en tu respuesta JSON
+                                    .licencias, // Suponiendo que 'licencias' es el arreglo que contiene los datos en tu respuesta JSON
                                     "TotalRecordCount": data.licencias
                                         .length
                                 });
@@ -100,7 +100,7 @@
                     return $.Deferred(function($dfd) {
                         // Mostrar una confirmación personalizada antes de la eliminación
                         if (confirm(
-                            '¿Estás seguro de que quieres eliminar esta licencia?')) {
+                                '¿Estás seguro de que quieres eliminar esta licencia?')) {
                             $.ajax({
                                 type: 'DELETE',
                                 url: 'http://localhost:5800/delete/' + postData.id,
@@ -209,7 +209,10 @@
             window.location.href =
                 '/'; // Reemplaza '/ruta-de-tu-formulario' con la ruta correcta de tu formulario
         });
+        $('#PartesVencidos').on('click', '.jtable-toolbar-item-update', function() {
+            
 
+        });
     })
     </script>
 </body>
