@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Tabla con jTable</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/jtable@2.6.0/lib/themes/metro/blue/jtable.min.css" rel="stylesheet">
@@ -60,8 +61,37 @@ $(document).ready(function () {
                 });
             },
                 createAction: '/GettingStarted/CreatePerson',
-                updateAction: '/GettingStarted/UpdatePerson',
-                deleteAction: '/eliminar-form',
+                updateAction: 'http://localhost:5800/update/',
+                deleteAction: function (postData, jtParams) {
+    return $.Deferred(function ($dfd) {
+        // Mostrar una confirmación personalizada antes de la eliminación
+        if (confirm('¿Estás seguro de que quieres eliminar esta licencia?')) {
+            $.ajax({
+                type: 'DELETE',
+                url: '/eliminar-form',
+                headers: {
+                    'X-CSRF-TOKEN': document.getElementsByTagName("meta")[2].content,
+                    'Content-Type': 'application/json'
+                },
+                dataType: 'json',
+                success: function (data) {
+                    // Mostrar mensaje de éxito personalizado
+                    alert('Licencia eliminada correctamente');
+                    $dfd.resolve(data);
+                },
+                error: function () {
+                    // Mostrar mensaje de error personalizado
+                    alert('Error al eliminar la licencia');
+                    $dfd.reject();
+                }
+            });
+        } else {
+            // Cancelar la eliminación si el usuario cancela la confirmación
+            $dfd.reject();
+        }
+    });
+}
+               
            /*     deleteAction:  function (postData, jtParams) {
             return $.Deferred(function ($dfd) {
                 console.log(postData.record.id),
@@ -88,7 +118,15 @@ $(document).ready(function () {
                 title: 'DNI',
                 width: '10%',
                 listClass: 'text-center',
-                key: true,
+                 key: true,
+                list: true,
+                sorting: false,
+            },
+            id:{
+              title: 'ID',
+                width: '10%',
+                listClass: 'text-center',
+                 key: true,
                 list: true,
                 sorting: false,
             },
@@ -141,6 +179,14 @@ $(document).ready(function () {
                 sorting: false,
             }, 
         },
+        messages: {
+        deleteConfirmation: '¿Estás seguro de que quieres eliminar esta licencia?', // Mensaje personalizado para la confirmación de eliminación
+        deleteText: 'Eliminar', // Texto del botón de eliminar en la alerta
+        deleting: 'Eliminando...', // Mensaje que se muestra durante el proceso de eliminación
+        deleteSuccess: 'Licencia eliminada correctamente', // Mensaje de éxito después de la eliminación
+        deleteError: 'Error al eliminar la licencia', // Mensaje de error en caso de fallo en la eliminación
+    },
+
 });
 
 $('#PartesVencidos').jtable('load');
@@ -148,6 +194,7 @@ $('#PartesVencidos').on('click', '.jtable-toolbar-item-add-record', function () 
         // Redirigir al usuario a la vista del formulario
         window.location.href = '/'; // Reemplaza '/ruta-de-tu-formulario' con la ruta correcta de tu formulario
     });
+    
 })
 </script>
 </body>

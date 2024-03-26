@@ -16,4 +16,4 @@ use App\Http\Controllers\TablaController;
 Route::get('/', [TablaController::class, 'index']);
 Route::get('/tabla', [TablaController::class, 'envio']);
 Route::post('procesar-form', [TablaController::class,'pocesarForm']);
-Route::post('/eliminar-form', [TablaController::class,'eliminarForm']);
+Route::delete('/eliminar-form', [TablaController::class,'eliminarForm']);

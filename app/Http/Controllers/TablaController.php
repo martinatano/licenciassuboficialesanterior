@@ -5,6 +5,7 @@ use Request;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
+
 class TablaController extends Controller
 {
     function index(){
@@ -38,6 +39,7 @@ class TablaController extends Controller
     }
     function procesarForm(Request $request){
         $dni = Request::input('dni');
+        $id = Request::input('id');
         $fechaInicio = Request:: input('fechaInicio');
         $fechaFin = Request:: input('fechaFin');
         $tipo = Request:: input('tipoLicencia');
@@ -56,18 +58,15 @@ class TablaController extends Controller
         }
     }
     function eliminarForm(Request $request){
-        dd($request);
         $id = Request::input('id');
         try{
-            $response = Http::delete('http://localhost:5800/delete/', ['dni' => $dni]);
-            if ($response->successful()) {
-                return response()->json(['message' => 'Licencia eliminada correctamente']);
-            } else {
-                // Error en la solicitud al endpoint
-                return response()->json(['error' => 'Error al eliminar la licencia'], 500);
-            }
-            }catch(RequestException $e){
-            return $e->getMessage();
+            $client = new Client(['verify' => false]);
+            $request = $client -> delete('http://localhost:5800/delete/'.$id);
+            $response = json_decode($request->getBody()->getContents(), true);
+
+            return json_encode($response);
+        } catch(RequestException $e){
+        return null ;
         }
     }
 }
