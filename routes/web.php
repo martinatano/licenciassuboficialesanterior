@@ -15,4 +15,5 @@ use App\Http\Controllers\TablaController;
 
 Route::get('/', [TablaController::class, 'index']);
 Route::get('/tabla', [TablaController::class, 'envio']);
-Route::post('procesar-form', [TablaController::class,'pocesarForm']);
+Route::post('/update', [TablaController::class, 'update']);
+

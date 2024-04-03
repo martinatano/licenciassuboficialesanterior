@@ -68,7 +68,7 @@
                                 $dfd.resolve({
                                     "Result": "OK",
                                     "Records": data
-                                    .licencias, // Suponiendo que 'licencias' es el arreglo que contiene los datos en tu respuesta JSON
+                                        .licencias, // Suponiendo que 'licencias' es el arreglo que contiene los datos en tu respuesta JSON
                                     "TotalRecordCount": data.licencias
                                         .length
                                 });
@@ -81,55 +81,108 @@
                 },
                 createAction: '/GettingStarted/CreatePerson',
                 updateAction: function(postData) {
+                    const url = new URLSearchParams(
+                        postData
+                        )
+
+                    const obj = {}
+                    for (const [key, value] of url.entries()) {
+                        
+                        if(key === "fechaInicio" || key=== "fechaFin"){
+                         const newDate = value.split("T")[0];
+                         obj[key] = newDate
+                        }else{
+                        obj[key] = value
+                        }
+                    }
+                    console.log(obj);
                     return $.Deferred(function($dfd) {
-                        $.ajax({
-                            url: 'http://localhost:5800/update',
-                            type: 'POST',
-                            dataType: 'json',
-                            data: postData,
-                            success: function(data) {
-                                $dfd.resolve(data);
-                            },
-                            error: function() {
+                        // Mostrar una alerta personalizada con Sweet Alert
+                        Swal.fire({
+                            title: '¿Estás seguro?',
+                            text: 'Esta acción editara la licencia. ¿Deseas continuar?',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Sí, editar',
+                            cancelButtonText: 'Cancelar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // El usuario confirmó, realizar la eliminación
+                                $.ajax({
+                                    type: 'POST',
+                                    url: 'http://localhost:5800/update',
+                                   
+                                    dataType: 'json',
+                                    data: obj,
+                                    success: function(data) {
+                                        // Mostrar mensaje de éxito personalizado
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Éxito',
+                                            text: 'Licencia editada correctamente'
+                                        });
+                                        $dfd.resolve({
+                                            "Result": "OK"
+                                        });
+                                    },
+                                    error: function(e) {
+                                      console.log(e);
+                                        $dfd.reject();
+                                    }
+                                });
+                            } else {
+                                // El usuario canceló, rechazar la eliminación
                                 $dfd.reject();
                             }
                         });
                     });
+
                 },
                 deleteAction: function(postData) {
                     return $.Deferred(function($dfd) {
-                        // Mostrar una confirmación personalizada antes de la eliminación
-                        if (confirm(
-                                '¿Estás seguro de que quieres eliminar esta licencia?')) {
-                            $.ajax({
-                                type: 'DELETE',
-                                url: 'http://localhost:5800/delete/' + postData.id,
-                                headers: {
-                                    'X-CSRF-TOKEN': document.getElementsByTagName(
-                                        "meta")[2].content,
-                                    'Content-Type': 'application/json'
-                                },
-                                dataType: 'json',
-                                success: function(data) {
-                                    // Mostrar mensaje de éxito personalizado
-                                    Swal.fire({
-                                        icon: "success",
-                                        title: "Exito",
-                                        text: "Licencia eliminada correctamente"
-                                    });
-                                    $('#licenciasCargadas').jtable('reload');
-                                    $dfd.resolve({
-                                        "Result": "OK"
-                                    });
-                                },
-                                error: function() {
-                                    $dfd.reject();
-                                }
-                            });
-                        } else {
-                            // Cancelar la eliminación si el usuario cancela la confirmación
-                            $dfd.reject();
-                        }
+                        // Mostrar una alerta personalizada con Sweet Alert
+                        Swal.fire({
+                            title: '¿Estás seguro?',
+                            text: 'Esta acción eliminará la licencia. ¿Deseas continuar?',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Sí, eliminar',
+                            cancelButtonText: 'Cancelar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // El usuario confirmó, realizar la eliminación
+                                $.ajax({
+                                    type: 'DELETE',
+                                    url: 'http://localhost:5800/delete/' +
+                                        postData.id,
+                                    headers: {
+                                        'X-CSRF-TOKEN': document
+                                            .getElementsByTagName(
+                                                "meta")[2]
+                                            .content,
+                                        'Content-Type': 'application/json'
+                                    },
+                                    dataType: 'json',
+                                    success: function(data) {
+                                        // Mostrar mensaje de éxito personalizado
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Éxito',
+                                            text: 'Licencia eliminada correctamente'
+                                        });
+                                        $dfd.resolve({
+                                            "Result": "OK"
+                                        });
+                                    },
+                                    error: function() {
+                                        $dfd.reject();
+                                    }
+                                });
+                            } else {
+                                // El usuario canceló, rechazar la eliminación
+                                $dfd.reject();
+                            }
+                        });
                     });
                 }
             },
@@ -208,10 +261,6 @@
             // Redirigir al usuario a la vista del formulario
             window.location.href =
                 '/'; // Reemplaza '/ruta-de-tu-formulario' con la ruta correcta de tu formulario
-        });
-        $('#PartesVencidos').on('click', '.jtable-toolbar-item-update', function() {
-            
-
         });
     })
     </script>

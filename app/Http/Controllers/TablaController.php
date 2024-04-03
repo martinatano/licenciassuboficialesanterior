@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Request;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-
+use App\Models\Settings;
 
 class TablaController extends Controller
 {
@@ -37,7 +37,12 @@ class TablaController extends Controller
         return null ;
         }
     }
-    function procesarForm(Request $request){
+
+    function update(Request $request, $id){
+        
+    }
+ 
+    /*function procesarForm(Request $request){
         $dni = Request::input('dni');
         $id = Request::input('id');
         $fechaInicio = Request:: input('fechaInicio');
@@ -56,5 +61,5 @@ class TablaController extends Controller
         }catch(RequestException $e){
             return $e->getMessage();
         }
-    }
+    }*/
 }
