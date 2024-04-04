@@ -183,7 +183,6 @@ $(document).ready(function() {
     $('#btnEnvio').click(function(e) {
         e.preventDefault();
         var formData = $('#myForm').serialize();
-        console.log(formData);
         $.ajax({
             method: 'POST',
             url: 'http://localhost:5800/insert',
@@ -194,6 +193,11 @@ $(document).ready(function() {
                     icon: "success",
                     title: "Gracias!",
                     text: "Formulario enviado con exito",
+                }).then((result) => {
+                    if (result.isConfirmed || result.isDismissed) {
+                        location
+                    .reload(); // Recargar la página cuando se cierre el SweetAlert
+                    }
                 });
             },
             error: function(xhr, status, error) {
