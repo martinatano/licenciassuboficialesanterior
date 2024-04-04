@@ -155,10 +155,10 @@ $(document).ready(function() {
                 minlength: "El DNI debe tener al menos {0} dígitos",
                 maxlength: "El DNI no debe exceder los {0} dígitos"
             },
-            fechainicio: {
+            fechaInicio: {
                 required: "Debes seleccionar una fecha de inicio"
             },
-            fechafin: {
+            fechaFin: {
                 required: "Debes seleccionar una fecha de fin"
             },
             tipo: {
@@ -181,7 +181,7 @@ $(document).ready(function() {
         }
     });
     $('#btnEnvio').click(function(e) {
-        e.preventDefault();
+       // e.preventDefault();
         var formData = $('#myForm').serialize();
         $.ajax({
             method: 'POST',
