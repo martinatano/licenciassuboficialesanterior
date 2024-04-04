@@ -83,16 +83,16 @@
                 updateAction: function(postData) {
                     const url = new URLSearchParams(
                         postData
-                        )
+                    )
 
                     const obj = {}
                     for (const [key, value] of url.entries()) {
-                        
-                        if(key === "fechaInicio" || key=== "fechaFin"){
-                         const newDate = value.split("T")[0];
-                         obj[key] = newDate
-                        }else{
-                        obj[key] = value
+
+                        if (key === "fechaInicio" || key === "fechaFin") {
+                            const newDate = value.split("T")[0];
+                            obj[key] = newDate
+                        } else {
+                            obj[key] = value
                         }
                     }
                     console.log(obj);
@@ -111,7 +111,7 @@
                                 $.ajax({
                                     type: 'POST',
                                     url: 'http://localhost:5800/update',
-                                   
+
                                     dataType: 'json',
                                     data: obj,
                                     success: function(data) {
@@ -126,7 +126,7 @@
                                         });
                                     },
                                     error: function(e) {
-                                      console.log(e);
+                                        console.log(e);
                                         $dfd.reject();
                                     }
                                 });
@@ -209,12 +209,22 @@
                     title: 'Fecha inicio',
                     width: '10%',
                     sorting: false,
+                    display: function(data) {
+                        // Formatear la fecha
+                        return new Date(data.record.fechaInicio).toISOString().split('T')[0];
+                    },
+                    displayFormat: 'yy-mm-dd'
                 },
                 fechaFin: {
                     listClass: 'text-center',
                     title: 'Fecha fin',
                     width: '10%',
                     sorting: false,
+                    display: function(data) {
+                        // Formatear la fecha
+                        return new Date(data.record.fechaFin).toISOString().split('T')[0];
+                    },
+                    displayFormat: 'yy-mm-dd'
                 },
                 tipo: {
                     title: 'Tipo de licencia',
@@ -255,6 +265,7 @@
             },
 
         });
+
 
         $('#PartesVencidos').jtable('load');
         $('#PartesVencidos').on('click', '.jtable-toolbar-item-add-record', function() {

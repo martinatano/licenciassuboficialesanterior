@@ -38,10 +38,6 @@ class TablaController extends Controller
         }
     }
 
-    function update(Request $request, $id){
-        
-    }
- 
     /*function procesarForm(Request $request){
         $dni = Request::input('dni');
         $id = Request::input('id');

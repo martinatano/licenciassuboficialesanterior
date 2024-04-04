@@ -37,11 +37,11 @@
         </div>
         <div class="col-md-4">
             <label for="fecha" class="form-label">Fecha de inicio de licencia</label>
-            <input type="date" class="form-control" id="fechaInicio" name="fechaInicio">
+            <input type="date" class="form-control fecha-input" id="fechaInicio" name="fechaInicio">
         </div>
         <div class="col-md-4">
             <label for="fecha" class="form-label">Fecha de fin de licencia</label>
-            <input type="date" class="form-control" id="fechaFin" name="fechaFin">
+            <input type="date" class="form-control fecha-input" id="fechaFin" name="fechaFin">
         </div>
         <div class="col-md-6">
             <label for="inputState" class="form-label">Tipo de licencia</label>
