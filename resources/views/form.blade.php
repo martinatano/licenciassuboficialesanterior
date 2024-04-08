@@ -178,11 +178,9 @@ $(document).ready(function() {
                 minlength: "La orden del dia debe tener al menos 6 caracteres",
                 maxlength: "La orden del dia no puede tener mas de 10 caracteres"
             }
-        }
-    });
-    $('#btnEnvio').click(function(e) {
-       // e.preventDefault();
-        var formData = $('#myForm').serialize();
+        },
+    submitHandler: function(form) { // for demo
+        var formData = $(form).serialize();
         $.ajax({
             method: 'POST',
             url: 'http://localhost:5800/insert',
@@ -193,10 +191,8 @@ $(document).ready(function() {
                     icon: "success",
                     title: "Gracias!",
                     text: "Formulario enviado con exito",
-                }).then((result) => {
-                    if (result.isConfirmed || result.isDismissed) {
-                        location
-                    .reload(); // Recargar la página cuando se cierre el SweetAlert
+                    willClose: function() {
+                        location.reload(); // Recargar la página cuando se cierre el SweetAlert
                     }
                 });
             },
@@ -204,6 +200,12 @@ $(document).ready(function() {
                 console.error('Hubo un error al enviar los datos: ' + error);
             }
         });
-    });
+        return false; // required to block normal submit since you used ajax
+    }
+});
+
+$('#btnEnvio').click(function(e) {
+    $('#myForm').submit(); 
+});
 });
 </script>
