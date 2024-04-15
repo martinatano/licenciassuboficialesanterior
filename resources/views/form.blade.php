@@ -204,8 +204,5 @@ $(document).ready(function() {
     }
 });
 
-$('#btnEnvio').click(function(e) {
-    $('#myForm').submit(); 
-});
 });
 </script>
